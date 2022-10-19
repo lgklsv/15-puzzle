@@ -19,6 +19,7 @@ module.exports = {
     resolve: {
         extensions: ['.js'],
     },
+    devtool: 'source-map',
     devServer: {
         static: {
             directory: path.resolve(__dirname, 'dist')
@@ -34,9 +35,7 @@ module.exports = {
             template: './template.html',
         }),
         new CleanWebpackPlugin(),
-        new MiniCssExtractPlugin({
-            filename:'[name][contenthash].css',
-        })
+        new MiniCssExtractPlugin()
     ],
     module: {
         rules: [
