@@ -6,9 +6,20 @@
     padding: 0;
     margin: 0;
 }
+html {
+    height: 100%;
+}
 
 body {
     font-family: 'Roboto', sans-serif;
+    text-align: center;
+    height: 100%;
+    @include flex-center;
+}
+
+canvas {
+    border: 2px solid black;
+    cursor: pointer;
 }
 
 .container {
