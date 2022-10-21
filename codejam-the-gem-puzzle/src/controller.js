@@ -2,16 +2,18 @@ import './styles/main.scss';
 
 const canvas = document.getElementById('gem-puzzle');
 const context = canvas.getContext('2d');
+const _patentElement  = document.querySelector('.game-body');
 
 // State
-const gameSize = 4;
+let gameSize = 3;
 const coords = [];
-const gameOver = false;
+let gameOver = false;
 const tileSize  = canvas.width / gameSize;
 let field = [];
 const winArr = [];
 let curTile = null;
-
+let moves = 0, time = 0;
+let gameTimer;
 
 canvas.addEventListener('click', function(e) {
     const clientX = e.offsetX;
@@ -19,7 +21,16 @@ canvas.addEventListener('click', function(e) {
 
     let colIndex;
     let rowIndex;
-
+    
+    const movesEl = document.querySelector('.moves-number');
+    if(moves === 0) {
+        const secondsEl = document.querySelector('.seconds');
+        gameTimer = setInterval(() => {
+            time++;
+            secondsEl.textContent = formatSeconds(time);
+        }, 1000);
+    }
+    
     for(let i = 0; i < gameSize; i++) {
 
         let curTileID = coords[i].find(el => {
@@ -55,10 +66,14 @@ canvas.addEventListener('click', function(e) {
         field[colIndex][rowIndex] = 0;
         field[emptyTile.col][emptyTile.row] = temp;
         curTile = null;
+        moves++;
+        movesEl.textContent = moves;
+
+        gameOver = checkWin();
+
     }
     
 })
-
 
 function getRandomField(size) {
     const exist = [];
@@ -73,7 +88,6 @@ function getRandomField(size) {
                 const suffle = Math.floor(Math.random() * size * size);
                 if(!exist.includes(suffle)) {
                     row.push(suffle);
-                    
                     exist.push(suffle);
                 }
             }
@@ -89,10 +103,33 @@ function getRandomField(size) {
     return resArr;
 }
 
+function checkWin() {
+    for (let i = 0; i < gameSize; i++) {
+        for(let j = 0; j < gameSize; j++) {
+            if(field[i][j] !== winArr[i][j])
+            return false;
+        }
+    }
+    return true;
+}
+
+function showGameWinScreen(winTime) {
+    // context.fillStyle = 'white';
+    context.font = '32px Roboto';
+    context.fillStyle = 'black';
+    context.textAlign = 'center';
+    context.fillText(`Hooray!`, 50, 90);
+    context.fillText(`You solved the puzzle in`, 50, 130);
+    context.fillText(`${formatSeconds(winTime)}`, 50, 170);
+    context.fillText(`and ${moves} moves!`, 50, 210);
+}
+
 function draw() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     if(gameOver) {
-        console.log('game over');
+        let curTime = time;
+        clearInterval(gameTimer);
+        showGameWinScreen(curTime);
     } else {
         for(let i = 0; i < gameSize; i++) {
             for(let j = 0; j < gameSize; j++) {
@@ -127,10 +164,58 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
+function formatSeconds(seconds) {
+    const date = new Date(1970, 0, 1);
+    date.setSeconds(seconds);
+    return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
+}
+
+function getElemetns() {
+    
+    const markup = `
+        <div class="btn-top">
+            <div class="btn-primary shuffle-start">
+                <button class="text-reg">Shuffle and start</button>
+            </div>
+            <div class="btn-primary stop">
+                <button class="text-reg" >Stop</button>
+            </div>
+            <div class="btn-primary save">
+                <button class="text-reg">Save</button>
+            </div>
+            <div class="btn-primary results">
+                <button class="text-reg">Results</button>
+            </div>
+        </div>
+        <div class="indicators">
+            <div class="moves">
+                <p class="text-reg">Moves:</p>
+                <p class="text-reg moves-number">0</p>
+            </div>
+            <div class="text-reg time">
+                <p class="text-reg">Time:</p>
+                <span class="text-reg seconds">00:00</span>
+            </div>
+        </div>
+    `;
+
+    _patentElement.insertAdjacentHTML('afterbegin', markup);
+}
+
 function init() {
+    getElemetns();
     field = getRandomField(gameSize);
     // console.log(field, coords, winArr);
     draw(gameSize);
 }
 
 init();
+
+
+// CHEATCODE BUTTON
+
+// const winBtn = document.querySelector('.results');
+
+// winBtn.addEventListener('click', function() {
+//     gameOver = true;
+// }) 
