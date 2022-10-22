@@ -5,10 +5,10 @@ const context = canvas.getContext('2d');
 const _patentElement  = document.querySelector('.game-body');
 
 // State
-let gameSize = 3;
+let gameSize = 4;
 let coords = [];
 let gameOver = false;
-const tileSize  = canvas.width / gameSize;
+let tileSize  = canvas.width / gameSize;
 let field = [];
 let winArr = [];
 let curTile = null;
@@ -207,16 +207,16 @@ function getElemtnsBottom() {
     const markup = `
         <div class="frame-size">
             <p class="text-reg">Frame size:</p>
-            <p class="text-reg frame-size-numbers">4x4</p>
+            <p class="text-reg frame-size-numbers">${gameSize}x${gameSize}</p>
         </div>
         <div class="picksize">
             <p class="text-reg">Other sizes:</p>
-            <p class="text-reg frame-size-numbers_link">3x3</p>
-            <p class="text-reg frame-size-numbers_link">4x4</p>
-            <p class="text-reg frame-size-numbers_link">5x5</p>
-            <p class="text-reg frame-size-numbers_link">6x6</p>
-            <p class="text-reg frame-size-numbers_link">7x7</p>
-            <p class="text-reg frame-size-numbers_link">8x8</p>
+            <p class="text-reg frame-size-numbers_link" id="3">3x3</p>
+            <p class="text-reg frame-size-numbers_link" id="4">4x4</p>
+            <p class="text-reg frame-size-numbers_link" id="5">5x5</p>
+            <p class="text-reg frame-size-numbers_link" id="6">6x6</p>
+            <p class="text-reg frame-size-numbers_link" id="7">7x7</p>
+            <p class="text-reg frame-size-numbers_link" id="8">8x8</p>
         </div>
     `;
 
@@ -277,4 +277,26 @@ overlayBlur.addEventListener('click', function() {
             secondsEl.textContent = formatSeconds(time);
         }, 1000);
     }
+})
+
+const changeSizeEl = document.querySelector('.picksize');
+
+changeSizeEl.addEventListener('click', function(e) {
+    gameSize = +e.target.id;
+    tileSize = canvas.width / gameSize;
+    gameOver = false;
+    moves = 0;
+    time = 0;
+    curTile = null;
+    field = [];
+    coords = [];
+    winArr = [];
+
+    clearInterval(gameTimer);
+    document.querySelector('.moves-number').textContent = 0;
+    document.querySelector('.seconds').textContent = '00:00';
+    document.querySelector('.frame-size-numbers').textContent = `${gameSize}x${gameSize}`;
+    
+    field = getRandomField(gameSize);
+    draw(gameSize);
 })

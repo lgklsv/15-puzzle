@@ -123,6 +123,7 @@ canvas {
 .frame-size {
     @include flex-center;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .picksize {
