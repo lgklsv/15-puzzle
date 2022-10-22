@@ -5,25 +5,15 @@ const context = canvas.getContext('2d');
 const _patentElement  = document.querySelector('.game-body');
 
 // State
-// const state = {
-//     gameSize: 4,
-//     coords: [],
-//     gameOver: false,
-//     field: [],
-//     winArr: [],
-//     curTile: null,
-//     moves: 0, 
-//     time: 0,
-//     gameTimer,
-// }
+const state = {
+    gameSize: 4,
+    results: [],
+}
 
-// let tileSize2 = canvas.width / state.gameSize;
-// console.log();
-
-let gameSize = 4;
+// let gameSize = 4;
 let coords = [];
 let gameOver = false;
-let tileSize  = canvas.width / gameSize;
+let tileSize;
 let field = [];
 let winArr = [];
 let curTile = null;
@@ -48,8 +38,8 @@ canvas.addEventListener('click', function(e) {
         document.querySelector('.seconds').textContent = '00:00';
         clearInterval(gameTimer);
         gameTimer = undefined;
-        field = getRandomField(gameSize);
-        draw(gameSize);
+        field = getRandomField(state.gameSize);
+        draw(state.gameSize);
         return;
     }
 
@@ -66,7 +56,7 @@ canvas.addEventListener('click', function(e) {
         }, 1000);
     }
     
-    for(let i = 0; i < gameSize; i++) {
+    for(let i = 0; i < state.gameSize; i++) {
 
         let curTileID = coords[i].find(el => {
             return clientX > el.x && clientX < el.x + tileSize && clientY > el.y && clientY < el.y + tileSize;
@@ -133,17 +123,25 @@ function getRandomField(size) {
         coords.push(coordsRow);
         winArr.push(winArrRow);
     }
-    winArr[winArr.length - 1][gameSize - 1] = 0;
+    winArr[winArr.length - 1][state.gameSize - 1] = 0;
     return resArr;
 }
 
 function checkWin() {
-    for (let i = 0; i < gameSize; i++) {
-        for(let j = 0; j < gameSize; j++) {
+    for (let i = 0; i < state.gameSize; i++) {
+        for(let j = 0; j < state.gameSize; j++) {
             if(field[i][j] !== winArr[i][j])
             return false;
         }
     }
+    // const storageRes = localStorage.getItem('state');
+    // if(storageRes) {
+    //     let localState = JSON.parse(storageRes);
+    //     localState.results.push('hi');
+    // } 
+    let curSize = state.gameSize;
+    state.results.push({size: curSize, time: time, moves: moves});
+    persistState();
     return true;
 }
 
@@ -165,8 +163,8 @@ function draw() {
         clearInterval(gameTimer);
         showGameWinScreen(curTime);
     } else {
-        for(let i = 0; i < gameSize; i++) {
-            for(let j = 0; j < gameSize; j++) {
+        for(let i = 0; i < state.gameSize; i++) {
+            for(let j = 0; j < state.gameSize; j++) {
 
                 const dx = j * tileSize;
                 const dy = i * tileSize;
@@ -245,7 +243,7 @@ function getElemtnsBottom() {
     const markup = `
         <div class="frame-size">
             <p class="text-reg">Frame size:</p>
-            <p class="text-reg frame-size-numbers">${gameSize}x${gameSize}</p>
+            <p class="text-reg frame-size-numbers">${state.gameSize}x${state.gameSize}</p>
         </div>
         <div class="picksize">
             <p class="text-reg">Other sizes:</p>
@@ -262,11 +260,19 @@ function getElemtnsBottom() {
 }
 
 function init() {
+    const storage = localStorage.getItem('state');
+    if(storage) {
+        let localState = JSON.parse(storage);
+        state.gameSize = localState.gameSize;
+        state.results = localState.results;
+    } 
     getElemetnsTop();
     getElemtnsBottom();
-    field = getRandomField(gameSize);
+    
+    tileSize = canvas.width / state.gameSize;
+    field = getRandomField(state.gameSize);
     // console.log(field, coords, winArr);
-    draw(gameSize);
+    draw(state.gameSize);
 }
 init();
 
@@ -295,8 +301,8 @@ buttonsParent.addEventListener('click', function(e) {
         document.querySelector('.seconds').textContent = '00:00';
         clearInterval(gameTimer);
         gameTimer = undefined;
-        field = getRandomField(gameSize);
-        draw(gameSize);
+        field = getRandomField(state.gameSize);
+        draw(state.gameSize);
     }
     if(e.target.id == 'stop') {
         if(gameTimer) {
@@ -305,7 +311,7 @@ buttonsParent.addEventListener('click', function(e) {
         overlayBlur.classList.remove('hidden');
     }
     if(e.target.id == 'save') {
-
+        persistState();
     }
 })
 
@@ -323,8 +329,9 @@ overlayBlur.addEventListener('click', function() {
 const changeSizeEl = document.querySelector('.picksize');
 
 changeSizeEl.addEventListener('click', function(e) {
-    gameSize = +e.target.id;
-    tileSize = canvas.width / gameSize;
+    state.gameSize = +e.target.id;
+    persistState();
+    tileSize = canvas.width / state.gameSize;
     gameOver = false;
     moves = 0;
     time = 0;
@@ -337,8 +344,8 @@ changeSizeEl.addEventListener('click', function(e) {
     gameTimer = undefined;
     document.querySelector('.moves-number').textContent = 0;
     document.querySelector('.seconds').textContent = '00:00';
-    document.querySelector('.frame-size-numbers').textContent = `${gameSize}x${gameSize}`;
+    document.querySelector('.frame-size-numbers').textContent = `${state.gameSize}x${state.gameSize}`;
 
-    field = getRandomField(gameSize);
-    draw(gameSize);
+    field = getRandomField(state.gameSize);
+    draw(state.gameSize);
 })
