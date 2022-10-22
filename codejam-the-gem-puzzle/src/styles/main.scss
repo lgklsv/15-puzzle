@@ -26,6 +26,28 @@ canvas {
     cursor: pointer;
 }
 
+.overlay {
+    position: absolute;
+    opacity: 1;
+    transition: all 0.5s ease-in-out;
+    width: 100vw;
+    height: 100vh;
+    background-color: hsla(0, 0%, 0%, 0.5);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .overlay-text {
+        color: white;
+        font-size: 2rem;
+    }
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .container {
     max-width: 1280px;
     margin: 0 auto;

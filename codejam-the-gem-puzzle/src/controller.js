@@ -6,11 +6,11 @@ const _patentElement  = document.querySelector('.game-body');
 
 // State
 let gameSize = 3;
-const coords = [];
+let coords = [];
 let gameOver = false;
 const tileSize  = canvas.width / gameSize;
 let field = [];
-const winArr = [];
+let winArr = [];
 let curTile = null;
 let moves = 0, time = 0;
 let gameTimer;
@@ -25,6 +25,7 @@ canvas.addEventListener('click', function(e) {
     const movesEl = document.querySelector('.moves-number');
     if(moves === 0) {
         const secondsEl = document.querySelector('.seconds');
+        clearInterval(gameTimer);
         gameTimer = setInterval(() => {
             time++;
             secondsEl.textContent = formatSeconds(time);
@@ -70,7 +71,6 @@ canvas.addEventListener('click', function(e) {
         movesEl.textContent = moves;
 
         gameOver = checkWin();
-
     }
     
 })
@@ -138,7 +138,6 @@ function draw() {
                 const dy = i * tileSize;
                 
                 if(field[i][j]) {
-
                     context.beginPath();
 
                     context.rect(dx, dy, tileSize, tileSize);
@@ -170,21 +169,20 @@ function formatSeconds(seconds) {
     return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
 }
 
-function getElemetns() {
-    
+function getElemetnsTop() {
     const markup = `
         <div class="btn-top">
             <div class="btn-primary shuffle-start">
-                <button class="text-reg">Shuffle and start</button>
+                <button class="text-reg" id="shuffle">Shuffle and start</button>
             </div>
             <div class="btn-primary stop">
-                <button class="text-reg" >Stop</button>
+                <button class="text-reg" id="stop">Stop</button>
             </div>
             <div class="btn-primary save">
-                <button class="text-reg">Save</button>
+                <button class="text-reg" id="save">Save</button>
             </div>
             <div class="btn-primary results">
-                <button class="text-reg">Results</button>
+                <button class="text-reg" id="results">Results</button>
             </div>
         </div>
         <div class="indicators">
@@ -197,25 +195,86 @@ function getElemetns() {
                 <span class="text-reg seconds">00:00</span>
             </div>
         </div>
+        <div class="overlay hidden">
+            <p class="reg-text overlay-text">Click to continue the game...</p>
+        </div>
     `;
 
     _patentElement.insertAdjacentHTML('afterbegin', markup);
 }
 
+function getElemtnsBottom() {
+    const markup = `
+        <div class="frame-size">
+            <p class="text-reg">Frame size:</p>
+            <p class="text-reg frame-size-numbers">4x4</p>
+        </div>
+        <div class="picksize">
+            <p class="text-reg">Other sizes:</p>
+            <p class="text-reg frame-size-numbers_link">3x3</p>
+            <p class="text-reg frame-size-numbers_link">4x4</p>
+            <p class="text-reg frame-size-numbers_link">5x5</p>
+            <p class="text-reg frame-size-numbers_link">6x6</p>
+            <p class="text-reg frame-size-numbers_link">7x7</p>
+            <p class="text-reg frame-size-numbers_link">8x8</p>
+        </div>
+    `;
+
+    _patentElement.insertAdjacentHTML('beforeend', markup);
+}
+
 function init() {
-    getElemetns();
+    getElemetnsTop();
+    getElemtnsBottom();
     field = getRandomField(gameSize);
     // console.log(field, coords, winArr);
     draw(gameSize);
 }
-
 init();
 
 
 // CHEATCODE BUTTON
-
 // const winBtn = document.querySelector('.results');
 
 // winBtn.addEventListener('click', function() {
 //     gameOver = true;
 // }) 
+const overlayBlur = document.querySelector('.overlay');
+const buttonsParent = document.querySelector('.btn-top');
+
+buttonsParent.addEventListener('click', function(e) {
+    if(e.target.id == 'shuffle') {
+        gameOver = false;
+        moves = 0;
+        time = 0;
+        curTile = null;
+        field = [];
+        coords = [];
+        winArr = [];
+        
+        document.querySelector('.moves-number').textContent = 0;
+        document.querySelector('.seconds').textContent = '00:00';
+        clearInterval(gameTimer);
+        field = getRandomField(gameSize);
+        draw(gameSize);
+    }
+    if(e.target.id == 'stop') {
+        if(gameTimer) {
+            clearInterval(gameTimer);
+        }
+        overlayBlur.classList.remove('hidden');
+    }
+    if(e.target.id == 'save') {
+    }
+})
+
+overlayBlur.addEventListener('click', function() {
+    overlayBlur.classList.add('hidden');
+    if(gameTimer) {
+        const secondsEl = document.querySelector('.seconds');
+        gameTimer = setInterval(() => {
+            time++;
+            secondsEl.textContent = formatSeconds(time);
+        }, 1000);
+    }
+})
