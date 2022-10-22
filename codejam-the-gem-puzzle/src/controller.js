@@ -19,6 +19,24 @@ canvas.addEventListener('click', function(e) {
     const clientX = e.offsetX;
     const clientY = e.offsetY;
 
+    if(gameOver) {
+        gameOver = false;
+        moves = 0;
+        time = 0;
+        curTile = null;
+
+        field = [];
+        coords = [];
+        winArr = [];
+
+        document.querySelector('.moves-number').textContent = 0;
+        document.querySelector('.seconds').textContent = '00:00';
+        clearInterval(gameTimer);
+        field = getRandomField(gameSize);
+        draw(gameSize);
+        return;
+    }
+
     let colIndex;
     let rowIndex;
     
@@ -234,11 +252,12 @@ init();
 
 
 // CHEATCODE BUTTON
-// const winBtn = document.querySelector('.results');
+const winBtn = document.querySelector('.results');
 
-// winBtn.addEventListener('click', function() {
-//     gameOver = true;
-// }) 
+winBtn.addEventListener('click', function() {
+    gameOver = true;
+}) 
+
 const overlayBlur = document.querySelector('.overlay');
 const buttonsParent = document.querySelector('.btn-top');
 
@@ -296,7 +315,7 @@ changeSizeEl.addEventListener('click', function(e) {
     document.querySelector('.moves-number').textContent = 0;
     document.querySelector('.seconds').textContent = '00:00';
     document.querySelector('.frame-size-numbers').textContent = `${gameSize}x${gameSize}`;
-    
+
     field = getRandomField(gameSize);
     draw(gameSize);
 })
