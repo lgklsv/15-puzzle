@@ -5,6 +5,21 @@ const context = canvas.getContext('2d');
 const _patentElement  = document.querySelector('.game-body');
 
 // State
+// const state = {
+//     gameSize: 4,
+//     coords: [],
+//     gameOver: false,
+//     field: [],
+//     winArr: [],
+//     curTile: null,
+//     moves: 0, 
+//     time: 0,
+//     gameTimer,
+// }
+
+// let tileSize2 = canvas.width / state.gameSize;
+// console.log();
+
 let gameSize = 4;
 let coords = [];
 let gameOver = false;
@@ -32,6 +47,7 @@ canvas.addEventListener('click', function(e) {
         document.querySelector('.moves-number').textContent = 0;
         document.querySelector('.seconds').textContent = '00:00';
         clearInterval(gameTimer);
+        gameTimer = undefined;
         field = getRandomField(gameSize);
         draw(gameSize);
         return;
@@ -187,6 +203,10 @@ function formatSeconds(seconds) {
     return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
 }
 
+function persistState() {
+    localStorage.setItem('state', JSON.stringify(state));
+}
+
 function getElemetnsTop() {
     const markup = `
         <div class="btn-top">
@@ -274,6 +294,7 @@ buttonsParent.addEventListener('click', function(e) {
         document.querySelector('.moves-number').textContent = 0;
         document.querySelector('.seconds').textContent = '00:00';
         clearInterval(gameTimer);
+        gameTimer = undefined;
         field = getRandomField(gameSize);
         draw(gameSize);
     }
@@ -284,6 +305,7 @@ buttonsParent.addEventListener('click', function(e) {
         overlayBlur.classList.remove('hidden');
     }
     if(e.target.id == 'save') {
+
     }
 })
 
@@ -312,6 +334,7 @@ changeSizeEl.addEventListener('click', function(e) {
     winArr = [];
 
     clearInterval(gameTimer);
+    gameTimer = undefined;
     document.querySelector('.moves-number').textContent = 0;
     document.querySelector('.seconds').textContent = '00:00';
     document.querySelector('.frame-size-numbers').textContent = `${gameSize}x${gameSize}`;
