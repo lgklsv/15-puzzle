@@ -12,7 +12,6 @@ const state = {
     results: [],
 }
 
-// let gameSize = 4;
 let coords = [];
 let gameOver = false;
 let tileSize;
@@ -117,7 +116,7 @@ function suffleField(times) {
             if(field[j].indexOf(0) !== -1) {
                 indexRow = j;
                 indexCol = field[j].indexOf(0);
-                let randomMoveDir = Math.floor(Math.random() * (4 - 1 +1) + 1);
+                let randomMoveDir = Math.floor(Math.random() * (4 - 1 + 1) + 1);
                 if(randomMoveDir == 1) {
                     //left
                     if(field[indexRow]?.[indexCol - 1]) {
@@ -142,8 +141,8 @@ function suffleField(times) {
                 if(randomMoveDir == 4) {
                     // bottom
                     if(field[indexRow + 1]?.[indexCol]) {
-                        swap(1, 0, indexRow, indexCol);
                         swapEl = field[indexRow + 1][indexCol];
+                        swap(1, 0, indexRow, indexCol);
                     }
                 }
             }
@@ -187,14 +186,14 @@ function checkWin() {
 }
 
 function showGameWinScreen(winTime) {
-    // context.fillStyle = 'white';
     context.font = '32px Roboto';
-    context.fillStyle = 'black';
+    context.fillStyle = '#3c3c48';
     context.textAlign = 'center';
-    context.fillText(`Hooray!`, 50, 90);
-    context.fillText(`You solved the puzzle in`, 50, 130);
-    context.fillText(`${formatSeconds(winTime)}`, 50, 170);
-    context.fillText(`and ${moves} moves!`, 50, 210);
+    context.fillText(`Hooray! 🎉🎉🎉`, 200, 80);
+    context.fillText(`You solved the puzzle in`, 200, 120);
+    context.fillText(`${formatSeconds(winTime)}`, 200, 160);
+    context.fillText(`and ${moves} moves!`, 200, 200);
+    context.fillText(`Click to continue 🔁`, 200, 290);
 }
 
 function draw() {
@@ -214,7 +213,6 @@ function draw() {
                     context.beginPath();
 
                     context.roundRect(dx, dy, tileSize, tileSize, [10]);
-                    // context.rect(dx, dy, tileSize, tileSize);
                     context.fillStyle = '#c4a094';
                     context.fill();
 
@@ -256,9 +254,6 @@ function getElemetnsTop() {
             </div>
             <div class="btn-primary stop">
                 <button class="text-reg" id="stop">Stop</button>
-            </div>
-            <div class="btn-primary save">
-                <button class="text-reg" id="save">Save</button>
             </div>
             <div class="btn-primary results">
                 <button class="text-reg" id="results">Results</button>
@@ -347,13 +342,6 @@ function init() {
 }
 init();
 
-
-// CHEATCODE BUTTON
-// const winBtn = document.querySelector('.results');
-
-// winBtn.addEventListener('click', function() {
-//     gameOver = true;
-// }) 
 
 const overlayBlur = document.querySelector('.overlay');
 const buttonsParent = document.querySelector('.btn-top');
