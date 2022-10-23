@@ -21,6 +21,8 @@ let curTile = null;
 let moves = 0, time = 0;
 let gameTimer;
 
+let start = 0;
+
 canvas.addEventListener('click', function(e) {
     const clientX = e.offsetX;
     const clientY = e.offsetY;
@@ -196,7 +198,7 @@ function showGameWinScreen(winTime) {
     context.fillText(`Click to continue 🔁`, 200, 290);
 }
 
-function draw() {
+function tick() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     if(gameOver) {
         let curTime = time;
@@ -232,6 +234,14 @@ function draw() {
                 }
             }
         }
+    }
+}
+
+function draw(timestamp) {
+    const elapsed = timestamp - start;
+    if(elapsed > 30) {
+        start = timestamp; 
+        tick();
     }
     requestAnimationFrame(draw);
 }
