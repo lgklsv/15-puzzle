@@ -308,6 +308,7 @@ const overlayBlur = document.querySelector('.overlay');
 const buttonsParent = document.querySelector('.btn-top');
 const closeResBtn = document.querySelector('.close-btn');
 const resultsCont = document.querySelector('.results-container');
+const resultsListCont = document.querySelector('.results__list');
 
 buttonsParent.addEventListener('click', function(e) {
     if(e.target.id == 'shuffle') {
@@ -339,9 +340,21 @@ buttonsParent.addEventListener('click', function(e) {
         if(gameTimer) {
             clearInterval(gameTimer);
         }
+        resultsListCont.innerHTML = '';
+        resultsListCont.insertAdjacentHTML('afterbegin', getResults());
         resultsCont.classList.remove('hidden');
     }
 })
+
+function getResults() {
+    return state.results.map(resObj => generateResult(resObj)).join('');
+}
+
+function generateResult(obj) {
+    return `
+        <li class="results__list-item">Moves: ${obj.moves} / Time: ${formatSeconds(obj.time)}</li>
+    `;
+}
 
 overlayBlur.addEventListener('click', function() {
     overlayBlur.classList.add('hidden');
@@ -364,6 +377,7 @@ closeResBtn.addEventListener('click', function() {
         }, 1000);
     }
 })
+
 
 const changeSizeEl = document.querySelector('.picksize');
 
