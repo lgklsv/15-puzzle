@@ -40,7 +40,9 @@ canvas.addEventListener('click', function(e) {
         document.querySelector('.seconds').textContent = '00:00';
         clearInterval(gameTimer);
         gameTimer = undefined;
-        field = getRandomField(state.gameSize);
+
+        field = getField(state.gameSize);
+        suffleField(100);
         draw(state.gameSize);
         return;
     }
@@ -82,7 +84,7 @@ canvas.addEventListener('click', function(e) {
         if(field[colIndex - 1 ]?.[rowIndex] == 0) {
             return {col: colIndex - 1, row: rowIndex};
         }
-        if( field[colIndex + 1]?.[rowIndex] == 0) {
+        if(field[colIndex + 1]?.[rowIndex] == 0) {
             return {col: colIndex + 1, row: rowIndex};
         }
     }
@@ -101,8 +103,69 @@ canvas.addEventListener('click', function(e) {
     }
 })
 
-function getRandomField(size) {
-    const exist = [];
+function swap(directionX, directionY, rowIndex, colIndex) {
+    const temp = field[rowIndex + directionX][colIndex + directionY];
+    field[rowIndex + directionX][colIndex + directionY] = 0;
+    field[rowIndex][colIndex] = temp;
+}
+
+function suffleField(times) {
+    console.log(field[2][2]);
+    let indexRow, indexCol;
+    for(let i = 0; i < times; i++) {
+        let swapEl;
+        for(let j = 0; j < state.gameSize; j++) {
+            if(field[j].indexOf(0) !== -1) {
+                indexRow = j;
+                indexCol = field[j].indexOf(0);
+                let randomMoveDir = Math.floor(Math.random() * (4 - 1 +1) + 1);
+                if(randomMoveDir == 1) {
+                    //left
+                    if(field[indexRow]?.[indexCol - 1]) {
+                        swapEl = field[indexRow][indexCol - 1];
+                        swap(0, -1, indexRow, indexCol);
+                        console.log(swapEl);
+                        console.log('here 1');
+                    }
+                }
+                if(randomMoveDir == 2) {
+                    // top
+                    if(field[indexRow - 1]?.[indexCol]) {
+                        swapEl = field[indexRow - 1][indexCol];
+                        swap(-1, 0, indexRow, indexCol);
+                        console.log(swapEl);
+                        console.log('here 2');
+                    }
+                }
+                if(randomMoveDir == 3) {
+                    // right
+                    if(field[indexRow]?.[indexCol + 1]) {
+                        swapEl = field[indexRow][indexCol + 1];
+                        swap(0, 1, indexRow, indexCol);
+                        console.log(swapEl);
+                        console.log('here 3');
+                    }
+                }
+                if(randomMoveDir == 4) {
+                    // bottom
+                    // console.log(field[indexRow + 1][indexCol]);
+                    if(field[indexRow + 1]?.[indexCol]) {
+                        swap(1, 0, indexRow, indexCol);
+                        swapEl = field[indexRow + 1][indexCol];
+                        console.log(swapEl);
+                        console.log('here 4');
+                    }
+                }
+                
+                console.log(randomMoveDir);
+                console.log('row:', j);
+                console.log('col:', field[j].indexOf(0));
+            }
+        }    
+    }
+}
+
+function getField(size) {
     const resArr = [];
     let counter = 1;
     for(let i = 0; i < size; i++) {
@@ -110,13 +173,7 @@ function getRandomField(size) {
         const winArrRow = [];
         const coordsRow = [];
         for(let j = 0; j < size; j++) {
-            while(row.length !== size) {
-                const suffle = Math.floor(Math.random() * size * size);
-                if(!exist.includes(suffle)) {
-                    row.push(suffle);
-                    exist.push(suffle);
-                }
-            }
+            row.push(counter);
             winArrRow.push(counter);
             coordsRow.push({i , j , x: j * tileSize, y: i * tileSize});
             counter++;
@@ -126,6 +183,7 @@ function getRandomField(size) {
         winArr.push(winArrRow);
     }
     winArr[winArr.length - 1][state.gameSize - 1] = 0;
+    resArr[resArr.length - 1][state.gameSize - 1] = 0;
     return resArr;
 }
 
@@ -288,7 +346,11 @@ function init() {
     getElemetnsTop();
     getElemtnsBottom();
     tileSize = canvas.width / state.gameSize;
-    field = getRandomField(state.gameSize);
+    field = getField(state.gameSize);
+
+    suffleField(100);
+    console.log(field);
+    console.log(winArr);
     // console.log(field, coords, winArr);
     draw(state.gameSize);
 }
@@ -322,7 +384,9 @@ buttonsParent.addEventListener('click', function(e) {
         document.querySelector('.seconds').textContent = '00:00';
         clearInterval(gameTimer);
         gameTimer = undefined;
-        field = getRandomField(state.gameSize);
+
+        field = getField(state.gameSize);
+        suffleField(100);
         draw(state.gameSize);
     }
     if(e.target.id == 'stop') {
@@ -344,6 +408,7 @@ buttonsParent.addEventListener('click', function(e) {
             resultsListCont.insertAdjacentHTML('afterbegin', noResMes());
         }
         resultsListCont.insertAdjacentHTML('afterbegin', getResults(state.gameSize));
+        document.querySelector('.frame-size-numbers__res').textContent = `${state.gameSize}x${state.gameSize}`;
         resultsCont.classList.remove('hidden');
     }
 })
@@ -409,7 +474,8 @@ changeSizeEl.addEventListener('click', function(e) {
         document.querySelector('.frame-size-numbers').textContent = `${state.gameSize}x${state.gameSize}`;
         document.querySelector('.frame-size-numbers__res').textContent = `${state.gameSize}x${state.gameSize}`;
     
-        field = getRandomField(state.gameSize);
+        field = getField(state.gameSize);
+        suffleField(100);
         draw(state.gameSize);
     }
 })
