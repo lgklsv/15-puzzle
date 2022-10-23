@@ -110,7 +110,6 @@ function swap(directionX, directionY, rowIndex, colIndex) {
 }
 
 function suffleField(times) {
-    console.log(field[2][2]);
     let indexRow, indexCol;
     for(let i = 0; i < times; i++) {
         let swapEl;
@@ -293,9 +292,17 @@ function getElemetnsTop() {
             <div class="frame-size">
                 <p class="text-reg">Frame size:</p>
                 <p class="text-reg frame-size-numbers__res">${state.gameSize}x${state.gameSize}</p>
+                <p class="text-reg">&#8226;</p>
+                <div class="sorting-filer">
+                    <p class="text-reg">Sort:</p>
+                    <button class="text-reg sort-btn sort-by-moves">by Moves</button>
+                    <button class="text-reg sort-btn sort-btn-active sort-by-time">by Time</button>
+                </div>
             </div>
-            <ol class="results__list">
-            </ol>
+            <div class="results__lists-container">
+                <ol class="results__list">
+                </ol>
+            </div>
         </div>
     `;
 
@@ -336,7 +343,6 @@ function init() {
     field = getField(state.gameSize);
 
     suffleField(100);
-
     draw(state.gameSize);
 }
 init();
@@ -381,7 +387,8 @@ buttonsParent.addEventListener('click', function(e) {
         overlayBlur.classList.remove('hidden');
     }
     if(e.target.id == 'save') {
-        persistState();
+        // persistState();
+        gameOver = true;
     }
     if(e.target.id == 'results') {
         if(gameTimer) {
@@ -389,17 +396,21 @@ buttonsParent.addEventListener('click', function(e) {
         }
         
         resultsListCont.innerHTML = '';
-        if(!getResults(state.gameSize)) {
+        if(!getResultsByTime(state.gameSize)) {
             resultsListCont.insertAdjacentHTML('afterbegin', noResMes());
         }
-        resultsListCont.insertAdjacentHTML('afterbegin', getResults(state.gameSize));
+        resultsListCont.insertAdjacentHTML('afterbegin', getResultsByTime(state.gameSize));
         document.querySelector('.frame-size-numbers__res').textContent = `${state.gameSize}x${state.gameSize}`;
         resultsCont.classList.remove('hidden');
     }
 })
 
-function getResults(size) {
-    return state.results.filter(resobj => resobj.size == size).map(resObj => generateResult(resObj)).join('');
+function getResultsByTime(size) {
+    return state.results.filter(resobj => resobj.size == size).sort((a, b) => a.time - b.time).slice(0,10).map(resObj => generateResult(resObj)).join('');
+}
+
+function getResultsByMoves(size) {
+    return state.results.filter(resobj => resobj.size == size).sort((a, b) => a.moves - b.moves).slice(0,10).map(resObj => generateResult(resObj)).join('');
 }
 
 function generateResult(obj) {
@@ -410,7 +421,7 @@ function generateResult(obj) {
 
 function noResMes() {
     return `
-        <p class="reg-text nores-message">You have no results in this game size ^^</p>
+        <p class="reg-text nores-message">You have no results in this game size yet ^^</p>
     `;
 }
 
@@ -435,7 +446,6 @@ closeResBtn.addEventListener('click', function() {
         }, 1000);
     }
 })
-
 
 const changeSizeEl = document.querySelector('.picksize');
 
@@ -473,9 +483,32 @@ changeResultsSizeEl.addEventListener('click', function(e) {
         let curResSize = e.target.id;
         resultsListCont.innerHTML = '';
         document.querySelector('.frame-size-numbers__res').textContent = `${curResSize}x${curResSize}`;
-        if(!getResults(curResSize)) {
+        if(!getResultsByTime(curResSize)) {
             resultsListCont.insertAdjacentHTML('afterbegin', noResMes());
         }
-        resultsListCont.insertAdjacentHTML('afterbegin', getResults(curResSize));
+        resultsListCont.insertAdjacentHTML('afterbegin', getResultsByTime(curResSize));
+    }
+})
+
+const sortEl = document.querySelector('.sorting-filer');
+
+sortEl.addEventListener('click', function(e) {
+    if(e.target.classList.contains('sort-by-moves')) {
+        e.target.classList.add('sort-btn-active');
+        document.querySelector('.sort-by-time').classList.remove('sort-btn-active');
+        let curResSizeSort = +document.querySelector('.frame-size-numbers__res').textContent.slice(-1);
+        if(getResultsByMoves(curResSizeSort)) {
+            resultsListCont.innerHTML = '';
+            resultsListCont.insertAdjacentHTML('afterbegin', getResultsByMoves(curResSizeSort));
+        }
+    }
+    if(e.target.classList.contains('sort-by-time')) {
+        e.target.classList.add('sort-btn-active');
+        document.querySelector('.sort-by-moves').classList.remove('sort-btn-active');
+        let curResSizeSort = +document.querySelector('.frame-size-numbers__res').textContent.slice(-1);
+        if(getResultsByTime(curResSizeSort)) {
+            resultsListCont.innerHTML = '';
+            resultsListCont.insertAdjacentHTML('afterbegin', getResultsByTime(curResSizeSort));
+        }
     }
 })
