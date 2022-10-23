@@ -124,8 +124,6 @@ function suffleField(times) {
                     if(field[indexRow]?.[indexCol - 1]) {
                         swapEl = field[indexRow][indexCol - 1];
                         swap(0, -1, indexRow, indexCol);
-                        console.log(swapEl);
-                        console.log('here 1');
                     }
                 }
                 if(randomMoveDir == 2) {
@@ -133,8 +131,6 @@ function suffleField(times) {
                     if(field[indexRow - 1]?.[indexCol]) {
                         swapEl = field[indexRow - 1][indexCol];
                         swap(-1, 0, indexRow, indexCol);
-                        console.log(swapEl);
-                        console.log('here 2');
                     }
                 }
                 if(randomMoveDir == 3) {
@@ -142,24 +138,15 @@ function suffleField(times) {
                     if(field[indexRow]?.[indexCol + 1]) {
                         swapEl = field[indexRow][indexCol + 1];
                         swap(0, 1, indexRow, indexCol);
-                        console.log(swapEl);
-                        console.log('here 3');
                     }
                 }
                 if(randomMoveDir == 4) {
                     // bottom
-                    // console.log(field[indexRow + 1][indexCol]);
                     if(field[indexRow + 1]?.[indexCol]) {
                         swap(1, 0, indexRow, indexCol);
                         swapEl = field[indexRow + 1][indexCol];
-                        console.log(swapEl);
-                        console.log('here 4');
                     }
                 }
-                
-                console.log(randomMoveDir);
-                console.log('row:', j);
-                console.log('col:', field[j].indexOf(0));
             }
         }    
     }
@@ -349,9 +336,7 @@ function init() {
     field = getField(state.gameSize);
 
     suffleField(100);
-    console.log(field);
-    console.log(winArr);
-    // console.log(field, coords, winArr);
+
     draw(state.gameSize);
 }
 init();
