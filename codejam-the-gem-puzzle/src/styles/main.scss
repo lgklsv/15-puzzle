@@ -19,10 +19,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #fbf3db;
 }
 
 canvas {
-    border: 2px solid black;
+    border: 10px solid #523436;
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -57,7 +59,7 @@ canvas {
     @include flex-center;
     .stop {
         button {
-            background-color: grey;
+            background-color: #523436;
         }
     }
 }
@@ -68,12 +70,12 @@ canvas {
     button {
         padding: 15px;
         border-radius: 15px;
-        background-color: black;
+        background-color: #3c3c48;
         border: none;
         cursor: pointer;
-        color: white;
+        color: #fbf3db;
         &:hover {
-            background-color: blue;
+            background-color: #c4a094;
         }
         &:active {
             transform: translateY(2px)
@@ -94,6 +96,7 @@ canvas {
 .text-reg {
     padding-right: 10px;
     font-size: 1.1rem;
+    color: #3c3c48;
 }
 
 .nores-message {
@@ -137,7 +140,7 @@ canvas {
         color: gray;
         cursor: pointer;
         &:hover {
-            color: blue;
+            color: #3c3c48;
             text-decoration: underline;
         }
     }

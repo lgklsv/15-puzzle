@@ -1,8 +1,10 @@
 import './styles/main.scss';
+import audio from './assets/audio/move_sound7.mp3';
 
 const canvas = document.getElementById('gem-puzzle');
 const context = canvas.getContext('2d');
 const _patentElement  = document.querySelector('.game-body');
+const moveAudio = new Audio(audio);
 
 // State
 const state = {
@@ -94,9 +96,9 @@ canvas.addEventListener('click', function(e) {
         moves++;
         movesEl.textContent = moves;
 
+        moveAudio.play();
         gameOver = checkWin();
     }
-    
 })
 
 function getRandomField(size) {
@@ -167,15 +169,17 @@ function draw() {
                 if(field[i][j]) {
                     context.beginPath();
 
-                    context.rect(dx, dy, tileSize, tileSize);
-                    context.fillStyle = 'white';
+                    context.roundRect(dx, dy, tileSize, tileSize, [10]);
+                    // context.rect(dx, dy, tileSize, tileSize);
+                    context.fillStyle = '#c4a094';
                     context.fill();
 
-                    context.strokeStyle = 'black';
+                    context.strokeStyle = '#fcf0d8';
+                    context.lineWidth = 4;
                     context.stroke();
 
-                    context.font = '50px roboto';
-                    context.fillStyle = 'black';
+                    context.font = '50px Roboto';
+                    context.fillStyle = '#3c3c48';
                     context.textAlign = 'left';
                     context.textBaseline = 'top';
 
@@ -279,10 +283,10 @@ function init() {
         let localState = JSON.parse(storage);
         state.gameSize = localState.gameSize;
         state.results = localState.results;
-    } 
+    }
+    
     getElemetnsTop();
     getElemtnsBottom();
-    
     tileSize = canvas.width / state.gameSize;
     field = getRandomField(state.gameSize);
     // console.log(field, coords, winArr);
