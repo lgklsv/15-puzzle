@@ -234,24 +234,18 @@ function getElemetnsTop() {
             <h3 class="results__header">Top 10 Results:</h3>
             <div class="picksize__results">
                 <p class="text-reg">Sizes:</p>
-                <p class="text-reg frame-size-numbers_link frame-size__active" id="3">3x3</p>
+                <p class="text-reg frame-size-numbers_link" id="3">3x3</p>
                 <p class="text-reg frame-size-numbers_link" id="4">4x4</p>
                 <p class="text-reg frame-size-numbers_link" id="5">5x5</p>
                 <p class="text-reg frame-size-numbers_link" id="6">6x6</p>
                 <p class="text-reg frame-size-numbers_link" id="7">7x7</p>
                 <p class="text-reg frame-size-numbers_link" id="8">8x8</p>
             </div>
+            <div class="frame-size">
+                <p class="text-reg">Frame size:</p>
+                <p class="text-reg frame-size-numbers__res">${state.gameSize}x${state.gameSize}</p>
+            </div>
             <ol class="results__list">
-                <li class="results__list-item">Moves: N/A / Time: N/A</li>
-                <li class="results__list-item">Moves: N/A / Time: N/A</li>
-                <li class="results__list-item">Moves: N/A / Time: N/A</li>
-                <li class="results__list-item">Moves: / Time:</li>
-                <li class="results__list-item">Moves: / Time:</li>
-                <li class="results__list-item">Moves: / Time:</li>
-                <li class="results__list-item">Moves: / Time:</li>
-                <li class="results__list-item">Moves: / Time:</li>
-                <li class="results__list-item">Moves: / Time:</li>
-                <li class="results__list-item">Moves: / Time:</li>
             </ol>
         </div>
     `;
@@ -340,19 +334,29 @@ buttonsParent.addEventListener('click', function(e) {
         if(gameTimer) {
             clearInterval(gameTimer);
         }
+        
         resultsListCont.innerHTML = '';
-        resultsListCont.insertAdjacentHTML('afterbegin', getResults());
+        if(!getResults(state.gameSize)) {
+            resultsListCont.insertAdjacentHTML('afterbegin', noResMes());
+        }
+        resultsListCont.insertAdjacentHTML('afterbegin', getResults(state.gameSize));
         resultsCont.classList.remove('hidden');
     }
 })
 
-function getResults() {
-    return state.results.map(resObj => generateResult(resObj)).join('');
+function getResults(size) {
+    return state.results.filter(resobj => resobj.size == size).map(resObj => generateResult(resObj)).join('');
 }
 
 function generateResult(obj) {
     return `
         <li class="results__list-item">Moves: ${obj.moves} / Time: ${formatSeconds(obj.time)}</li>
+    `;
+}
+
+function noResMes() {
+    return `
+        <p class="reg-text nores-message">You have no results in this game size ^^</p>
     `;
 }
 
@@ -382,23 +386,41 @@ closeResBtn.addEventListener('click', function() {
 const changeSizeEl = document.querySelector('.picksize');
 
 changeSizeEl.addEventListener('click', function(e) {
-    state.gameSize = +e.target.id;
-    persistState();
-    tileSize = canvas.width / state.gameSize;
-    gameOver = false;
-    moves = 0;
-    time = 0;
-    curTile = null;
-    field = [];
-    coords = [];
-    winArr = [];
+    if(e.target.classList.contains('frame-size-numbers_link')) {
+        state.gameSize = +e.target.id;
+        persistState();
+        tileSize = canvas.width / state.gameSize;
+        gameOver = false;
+        moves = 0;
+        time = 0;
+        curTile = null;
+        field = [];
+        coords = [];
+        winArr = [];
+    
+        clearInterval(gameTimer);
+        gameTimer = undefined;
+        document.querySelector('.moves-number').textContent = 0;
+        document.querySelector('.seconds').textContent = '00:00';
+        document.querySelector('.frame-size-numbers').textContent = `${state.gameSize}x${state.gameSize}`;
+        document.querySelector('.frame-size-numbers__res').textContent = `${state.gameSize}x${state.gameSize}`;
+    
+        field = getRandomField(state.gameSize);
+        draw(state.gameSize);
+    }
+})
 
-    clearInterval(gameTimer);
-    gameTimer = undefined;
-    document.querySelector('.moves-number').textContent = 0;
-    document.querySelector('.seconds').textContent = '00:00';
-    document.querySelector('.frame-size-numbers').textContent = `${state.gameSize}x${state.gameSize}`;
+const changeResultsSizeEl = document.querySelector('.picksize__results');
 
-    field = getRandomField(state.gameSize);
-    draw(state.gameSize);
+changeResultsSizeEl.addEventListener('click', function(e) {
+    if(e.target.classList.contains('frame-size-numbers_link')) {
+
+        let curResSize = e.target.id;
+        resultsListCont.innerHTML = '';
+        document.querySelector('.frame-size-numbers__res').textContent = `${curResSize}x${curResSize}`;
+        if(!getResults(curResSize)) {
+            resultsListCont.insertAdjacentHTML('afterbegin', noResMes());
+        }
+        resultsListCont.insertAdjacentHTML('afterbegin', getResults(curResSize));
+    }
 })
