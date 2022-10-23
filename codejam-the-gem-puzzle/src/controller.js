@@ -374,10 +374,6 @@ buttonsParent.addEventListener('click', function(e) {
         }
         overlayBlur.classList.remove('hidden');
     }
-    if(e.target.id == 'save') {
-        // persistState();
-        gameOver = true;
-    }
     if(e.target.id == 'results') {
         if(gameTimer) {
             clearInterval(gameTimer);
@@ -409,7 +405,7 @@ function generateResult(obj) {
 
 function noResMes() {
     return `
-        <p class="reg-text nores-message">You have no results in this game size yet ^^</p>
+        <p class="reg-text nores-message">You have no results on this frame size yet ^^</p>
     `;
 }
 
@@ -458,7 +454,7 @@ changeSizeEl.addEventListener('click', function(e) {
         document.querySelector('.frame-size-numbers__res').textContent = `${state.gameSize}x${state.gameSize}`;
     
         field = getField(state.gameSize);
-        suffleField(100);
+        suffleField(1000);
         draw(state.gameSize);
     }
 })

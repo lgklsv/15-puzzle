@@ -26,6 +26,8 @@ canvas {
     border: 10px solid #523436;
     border-radius: 10px;
     cursor: pointer;
+    width: 400px;
+    height: 400px;
 }
 
 .overlay {
@@ -46,13 +48,6 @@ canvas {
 .hidden {
     opacity: 0;
     pointer-events: none;
-}
-
-.container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
 }
 
 .btn-top {
@@ -101,31 +96,12 @@ canvas {
 
 .nores-message {
     font-size: 1.5rem;
-    margin-top: 2rem;
+    padding-top: 10rem;
     color: grey;
 }
 
 .minutes, .seconds {
     padding-right: 0;
-}
-
-.frame-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    width: 500px;
-    margin: 0 auto;
-    height: 500px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 1px solid black;
-    .frame-tile {
-        @include flex-center;
-        border: 1px solid black;
-        font-size: 2rem;
-        color: grey;
-        cursor: pointer;
-    }
 }
 
 .frame-size {
@@ -146,53 +122,26 @@ canvas {
     }
 }
 
-@media (max-width: 640px) {
-    .container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-}
 @media (max-width: 630px) {
-    .container {
-        max-width: 400px;   
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin-top: 4rem;
-    }
-
-    .frame-grid {
-        width: 400px;
-        height: 400px;
-    }
-
-    .btn-primary {
-        padding: 5px;
-        button {
-            font-size: 0.8rem;
-        }
+    .results-container {
+        width: 500px;
+        height: 650px;
     }
 }
+@media (max-width: 520px) {
+    .results-container {
+        width: 420px;
+        height: 650px;
+    }
+
+    .nores-message {
+        font-size: 1.8rem;
+    }
+}
+
 @media (max-width: 420px) {
-    .container {
-        max-width: 300px;
-    }
-    .frame-grid {
-        width: 300px;
-        height: 300px;
-    }
-
-    .btn-primary {
-        padding: 5px;
-        padding-bottom: 10px;
-        button {
-            padding: 8px;
-            font-size: 0.8rem;
-        }
-    }
-
-    .text-reg {
-        font-size: 0.9rem;
+    .results-container {
+        width: 350px;
+        height: 650px;
     }
 }
