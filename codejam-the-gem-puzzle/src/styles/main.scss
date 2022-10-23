@@ -1,5 +1,6 @@
 @import 'roboto';
 @import 'snippets';
+@import 'resultsModal';
 
 * {
     box-sizing: border-box;
@@ -14,7 +15,6 @@ body {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     height: 100%;
-    // @include flex-center;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,9 +34,7 @@ canvas {
     height: 100vh;
     background-color: hsla(0, 0%, 0%, 0.5);
     backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-center;
     .overlay-text {
         color: white;
         font-size: 2rem;
@@ -126,7 +124,7 @@ canvas {
     margin-top: 20px;
 }
 
-.picksize {
+.picksize, .picksize__results {
     @include flex-center;
     .frame-size-numbers_link {
         color: gray;

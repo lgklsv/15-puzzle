@@ -134,11 +134,6 @@ function checkWin() {
             return false;
         }
     }
-    // const storageRes = localStorage.getItem('state');
-    // if(storageRes) {
-    //     let localState = JSON.parse(storageRes);
-    //     localState.results.push('hi');
-    // } 
     let curSize = state.gameSize;
     state.results.push({size: curSize, time: time, moves: moves});
     persistState();
@@ -179,7 +174,7 @@ function draw() {
                     context.strokeStyle = 'black';
                     context.stroke();
 
-                    context.font = '50px Roboto';
+                    context.font = '50px roboto';
                     context.fillStyle = 'black';
                     context.textAlign = 'left';
                     context.textBaseline = 'top';
@@ -234,6 +229,31 @@ function getElemetnsTop() {
         <div class="overlay hidden">
             <p class="reg-text overlay-text">Click to continue the game...</p>
         </div>
+        <div class="results-container hidden">
+            <div class="close-btn">&#x2716;</div>
+            <h3 class="results__header">Top 10 Results:</h3>
+            <div class="picksize__results">
+                <p class="text-reg">Sizes:</p>
+                <p class="text-reg frame-size-numbers_link frame-size__active" id="3">3x3</p>
+                <p class="text-reg frame-size-numbers_link" id="4">4x4</p>
+                <p class="text-reg frame-size-numbers_link" id="5">5x5</p>
+                <p class="text-reg frame-size-numbers_link" id="6">6x6</p>
+                <p class="text-reg frame-size-numbers_link" id="7">7x7</p>
+                <p class="text-reg frame-size-numbers_link" id="8">8x8</p>
+            </div>
+            <ol class="results__list">
+                <li class="results__list-item">Moves: N/A / Time: N/A</li>
+                <li class="results__list-item">Moves: N/A / Time: N/A</li>
+                <li class="results__list-item">Moves: N/A / Time: N/A</li>
+                <li class="results__list-item">Moves: / Time:</li>
+                <li class="results__list-item">Moves: / Time:</li>
+                <li class="results__list-item">Moves: / Time:</li>
+                <li class="results__list-item">Moves: / Time:</li>
+                <li class="results__list-item">Moves: / Time:</li>
+                <li class="results__list-item">Moves: / Time:</li>
+                <li class="results__list-item">Moves: / Time:</li>
+            </ol>
+        </div>
     `;
 
     _patentElement.insertAdjacentHTML('afterbegin', markup);
@@ -278,14 +298,16 @@ init();
 
 
 // CHEATCODE BUTTON
-const winBtn = document.querySelector('.results');
+// const winBtn = document.querySelector('.results');
 
-winBtn.addEventListener('click', function() {
-    gameOver = true;
-}) 
+// winBtn.addEventListener('click', function() {
+//     gameOver = true;
+// }) 
 
 const overlayBlur = document.querySelector('.overlay');
 const buttonsParent = document.querySelector('.btn-top');
+const closeResBtn = document.querySelector('.close-btn');
+const resultsCont = document.querySelector('.results-container');
 
 buttonsParent.addEventListener('click', function(e) {
     if(e.target.id == 'shuffle') {
@@ -313,10 +335,27 @@ buttonsParent.addEventListener('click', function(e) {
     if(e.target.id == 'save') {
         persistState();
     }
+    if(e.target.id == 'results') {
+        if(gameTimer) {
+            clearInterval(gameTimer);
+        }
+        resultsCont.classList.remove('hidden');
+    }
 })
 
 overlayBlur.addEventListener('click', function() {
     overlayBlur.classList.add('hidden');
+    if(gameTimer) {
+        const secondsEl = document.querySelector('.seconds');
+        gameTimer = setInterval(() => {
+            time++;
+            secondsEl.textContent = formatSeconds(time);
+        }, 1000);
+    }
+})
+
+closeResBtn.addEventListener('click', function() {
+    resultsCont.classList.add('hidden');
     if(gameTimer) {
         const secondsEl = document.querySelector('.seconds');
         gameTimer = setInterval(() => {
