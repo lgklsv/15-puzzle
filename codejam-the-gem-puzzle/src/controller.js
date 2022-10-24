@@ -540,6 +540,8 @@ changeResultsSizeEl.addEventListener('click', function(e) {
             resultsListCont.insertAdjacentHTML('afterbegin', noResMes());
         }
         resultsListCont.insertAdjacentHTML('afterbegin', getResultsByTime(curResSize));
+        document.querySelector('.sort-by-time').classList.add('sort-btn-active');
+        document.querySelector('.sort-by-moves').classList.remove('sort-btn-active');
     }
 })
 
@@ -584,6 +586,7 @@ function swipeDetect(el) {
     const movesEl = document.querySelector('.moves-number');
     surface.addEventListener('mousedown', function(e) {
         e.preventDefault();
+        console.log('mouse here');
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -605,6 +608,59 @@ function swipeDetect(el) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
+
+        startGameTimer(moves);
+        const emptyTile = getEmptyTile(colIndex, rowIndex);
+        
+        if(emptyTile) {
+            const emptyTileCoords = coords[emptyTile.col][emptyTile.row];
+            if(x > emptyTileCoords.x && x < emptyTileCoords.x + tileSize && y > emptyTileCoords.y && y < emptyTileCoords.y + tileSize) {
+
+                const temp = field[colIndex][rowIndex];
+                field[colIndex][rowIndex] = 0;
+                field[emptyTile.col][emptyTile.row] = temp;
+                curTile = null;
+                moves++;
+                movesEl.textContent = moves;
+
+                if (state.tileSound){
+                    moveAudio.play();
+                }
+                gameOver = checkWin();
+                dragAndDropDone = true;
+            }
+        }
+    })
+
+    // TOUCH SUPPORT
+    surface.addEventListener('touchstart', function(e) {
+        let touchObj = e.changedTouches[0];
+        console.log(touchObj);
+        const rect = canvas.getBoundingClientRect();
+        const x = touchObj.clientX - rect.left;
+        const y = touchObj.clientY - rect.top;
+
+        for(let i = 0; i < state.gameSize; i++) {
+            let curTileID = coords[i].find(el => {
+                return x > el.x && x < el.x + tileSize && y > el.y && y < el.y + tileSize;
+            })
+            if(curTileID) {
+                colIndex = i;
+                rowIndex = coords[i].indexOf(curTileID);
+                curTile = field[colIndex][rowIndex];
+            }
+        }
+    })
+
+    surface.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+    })
+
+    surface.addEventListener('touchend', function(e) {
+        let touchObj = e.changedTouches[0];
+        const rect = canvas.getBoundingClientRect();
+        const x = touchObj.clientX - rect.left;
+        const y = touchObj.clientY - rect.top;
 
         startGameTimer(moves);
         const emptyTile = getEmptyTile(colIndex, rowIndex);
