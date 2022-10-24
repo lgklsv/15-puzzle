@@ -188,14 +188,37 @@ function checkWin() {
 }
 
 function showGameWinScreen(winTime) {
-    context.font = '32px Roboto';
-    context.fillStyle = '#3c3c48';
-    context.textAlign = 'center';
-    context.fillText(`Hooray! 🎉🎉🎉`, 200, 80);
-    context.fillText(`You solved the puzzle in`, 200, 120);
-    context.fillText(`${formatSeconds(winTime)}`, 200, 160);
-    context.fillText(`and ${moves} moves!`, 200, 200);
-    context.fillText(`Click to continue 🔁`, 200, 290);
+
+    if(canvas.width == 350) {
+        context.font = '26px Roboto';
+        context.fillStyle = '#3c3c48';
+        context.textAlign = 'center';
+        context.fillText(`Hooray! 🎉🎉🎉`, 175, 80);
+        context.fillText(`You solved the puzzle in`, 175, 120);
+        context.fillText(`${formatSeconds(winTime)}`, 175, 160);
+        context.fillText(`and ${moves} moves!`, 175, 200);
+        context.fillText(`Click to continue 🔁`, 175, 290);
+    }
+    if (canvas.width = 300) {
+        context.font = '24px Roboto';
+        context.fillStyle = '#3c3c48';
+        context.textAlign = 'center';
+        context.fillText(`Hooray! 🎉🎉🎉`, 150, 80);
+        context.fillText(`You solved the puzzle in`, 150, 120);
+        context.fillText(`${formatSeconds(winTime)}`, 150, 160);
+        context.fillText(`and ${moves} moves!`, 150, 200);
+        context.fillText(`Click to continue 🔁`, 150, 250);
+    }
+    else {
+        context.font = '32px Roboto';
+        context.fillStyle = '#3c3c48';
+        context.textAlign = 'center';
+        context.fillText(`Hooray! 🎉🎉🎉`, 200, 80);
+        context.fillText(`You solved the puzzle in`, 200, 120);
+        context.fillText(`${formatSeconds(winTime)}`, 200, 160);
+        context.fillText(`and ${moves} moves!`, 200, 200);
+        context.fillText(`Click to continue 🔁`, 200, 290);
+    }    
 }
 
 function tick() {
@@ -355,6 +378,18 @@ function init() {
     
     getElemetnsTop();
     getElemtnsBottom();
+    if(screen.width <= 420) {
+        canvas.width = 350;
+        canvas.height = 350;
+        canvas.style.width = '350px';
+        canvas.style.height = '350px';
+    }
+    if(screen.width <= 360) {
+        canvas.width = 300;
+        canvas.height = 300;
+        canvas.style.width = '300px';
+        canvas.style.height = '300px';
+    }
     tileSize = canvas.width / state.gameSize;
     field = getField(state.gameSize);
 

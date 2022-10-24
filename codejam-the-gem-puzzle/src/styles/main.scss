@@ -98,6 +98,8 @@ canvas {
     font-size: 1.5rem;
     padding-top: 10rem;
     color: grey;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .minutes, .seconds {
@@ -141,7 +143,51 @@ canvas {
 
 @media (max-width: 420px) {
     .results-container {
-        width: 350px;
+        width: 355px;
         height: 650px;
     }
+
+    .results__list-item {
+        padding-left: 10%;
+    }
+    .results__list-item::before {
+        font-size: 1.8rem;
+        margin-left: -15%;
+    }
+}
+
+@media (max-width: 375px) {
+    .results-container {
+        width: 355px;
+        height: 650px;
+    }
+
+    .btn-primary {
+
+        button {
+            padding: 10px;
+        }
+    }
+
+}
+
+@media (max-width: 365px) {
+    .results-container {
+        width: 330px;
+        height: 650px;
+    }
+
+}
+@media (max-width: 340px) {
+    .results-container {
+        width: 300px;
+        height: 650px;
+    }
+
+    .btn-primary {
+        button {
+            font-size: 0.9rem;
+        }
+    }
+
 }
