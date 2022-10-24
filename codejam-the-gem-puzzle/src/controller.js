@@ -12,7 +12,6 @@ const state = {
     results: [],
     tileSound: true,
 }
-
 let coords = [];
 let gameOver = false;
 let tileSize;
@@ -22,7 +21,6 @@ let curTile = null;
 let moves = 0, time = 0;
 let gameTimer;
 let dragAndDropDone = false;
-
 let start = 0;
 
 canvas.addEventListener('click', function(e) {
@@ -70,7 +68,6 @@ canvas.addEventListener('click', function(e) {
     const emptyTile = getEmptyTile(colIndex, rowIndex);
 
     if(emptyTile && !dragAndDropDone) {
-
         const temp = field[colIndex][rowIndex];
         field[colIndex][rowIndex] = 0;
         field[emptyTile.col][emptyTile.row] = temp;
@@ -346,7 +343,6 @@ function getElemetnsTop() {
             </div>
         </div>
     `;
-
     _patentElement.insertAdjacentHTML('afterbegin', markup);
 }
 
@@ -373,7 +369,6 @@ function getElemtnsBottom() {
             <p class="text-reg frame-size-numbers_link" id="8">8x8</p>
         </div>
     `;
-
     _patentElement.insertAdjacentHTML('beforeend', markup);
 }
 
@@ -410,7 +405,6 @@ function init() {
     draw(state.gameSize);
 }
 init();
-
 
 const overlayBlur = document.querySelector('.overlay');
 const buttonsParent = document.querySelector('.btn-top');
@@ -586,7 +580,6 @@ function swipeDetect(el) {
     const movesEl = document.querySelector('.moves-number');
     surface.addEventListener('mousedown', function(e) {
         e.preventDefault();
-        console.log('mouse here');
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
