@@ -221,8 +221,19 @@ function tick() {
                     context.strokeStyle = '#fcf0d8';
                     context.lineWidth = 4;
                     context.stroke();
-
-                    context.font = '50px Roboto';
+                    if(state.gameSize == 3) {
+                        context.font = '60px Roboto';
+                    }if(state.gameSize == 4) {
+                        context.font = '50px Roboto';
+                    }if(state.gameSize == 5) {
+                        context.font = '40px Roboto';
+                    }if(state.gameSize == 6) {
+                        context.font = '40px Roboto';
+                    }if(state.gameSize == 7) {
+                        context.font = '35px Roboto';
+                    }if(state.gameSize == 8) {
+                        context.font = '30px Roboto';
+                    }
                     context.fillStyle = '#3c3c48';
                     context.textAlign = 'left';
                     context.textBaseline = 'top';
