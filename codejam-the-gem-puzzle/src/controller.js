@@ -10,6 +10,7 @@ const moveAudio = new Audio(audio);
 const state = {
     gameSize: 4,
     results: [],
+    tileSound: true,
 }
 
 let coords = [];
@@ -99,7 +100,9 @@ canvas.addEventListener('click', function(e) {
         moves++;
         movesEl.textContent = moves;
 
-        moveAudio.play();
+        if (state.tileSound){
+            moveAudio.play();
+        }
         gameOver = checkWin();
     }
 })
@@ -353,7 +356,14 @@ function getElemtnsBottom() {
         <div class="frame-size">
             <p class="text-reg">Frame size:</p>
             <p class="text-reg frame-size-numbers">${state.gameSize}x${state.gameSize}</p>
+            <p class="text-reg">&#8226;</p>
+            <p class="text-reg">Tile sound:</p>
+            <label class="switch">
+                <input type="checkbox" id="switch-sound" ${state.tileSound ? 'checked' : ''}>
+                <span class="slider round"></span>
+            </label>
         </div>
+        
         <div class="picksize">
             <p class="text-reg">Other sizes:</p>
             <p class="text-reg frame-size-numbers_link" id="3">3x3</p>
@@ -374,6 +384,7 @@ function init() {
         let localState = JSON.parse(storage);
         state.gameSize = localState.gameSize;
         state.results = localState.results;
+        state.tileSound = localState.tileSound;
     }
     
     getElemetnsTop();
@@ -550,5 +561,16 @@ sortEl.addEventListener('click', function(e) {
             resultsListCont.innerHTML = '';
             resultsListCont.insertAdjacentHTML('afterbegin', getResultsByTime(curResSizeSort));
         }
+    }
+})
+
+const tileSoundSwitcher = document.getElementById('switch-sound');
+tileSoundSwitcher.addEventListener('change', function(e) {
+    if(state.tileSound) {
+        state.tileSound = false;
+        persistState();
+    } else {
+        state.tileSound = true;
+        persistState();
     }
 })
