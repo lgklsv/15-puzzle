@@ -125,7 +125,6 @@ canvas {
 }
 
 
-/* The switch - the box around the slider */
 .switch {
     position: relative;
     display: inline-block;
@@ -134,10 +133,8 @@ canvas {
     cursor: pointer;
   }
   
-  /* Hide default HTML checkbox */
   .switch input {display:none;}
   
-  /* The slider */
   .slider {
     position: absolute;
     cursor: pointer;
@@ -177,7 +174,6 @@ canvas {
     transform: translateX(20px);
   }
   
-  /* Rounded sliders */
   .slider.round {
     border-radius: 34px;
   }
@@ -185,7 +181,6 @@ canvas {
   .slider.round:before {
     border-radius: 50%;
   }
-
 
 @media (max-width: 630px) {
     .results-container {
@@ -226,12 +221,10 @@ canvas {
     }
 
     .btn-primary {
-
         button {
             padding: 10px;
         }
     }
-
 }
 
 @media (max-width: 365px) {
@@ -252,5 +245,4 @@ canvas {
             font-size: 0.9rem;
         }
     }
-
 }

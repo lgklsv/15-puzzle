@@ -202,7 +202,7 @@ function showGameWinScreen(winTime) {
         context.fillText(`and ${moves} moves!`, 175, 200);
         context.fillText(`Click to continue 🔁`, 175, 290);
     }
-    if (canvas.width = 300) {
+    if (canvas.width == 300) {
         context.font = '24px Roboto';
         context.fillStyle = '#3c3c48';
         context.textAlign = 'center';
@@ -378,17 +378,7 @@ function getElemtnsBottom() {
     _patentElement.insertAdjacentHTML('beforeend', markup);
 }
 
-function init() {
-    const storage = localStorage.getItem('state');
-    if(storage) {
-        let localState = JSON.parse(storage);
-        state.gameSize = localState.gameSize;
-        state.results = localState.results;
-        state.tileSound = localState.tileSound;
-    }
-    
-    getElemetnsTop();
-    getElemtnsBottom();
+function setCanvasWidth() {
     if(screen.width <= 420) {
         canvas.width = 350;
         canvas.height = 350;
@@ -401,6 +391,19 @@ function init() {
         canvas.style.width = '300px';
         canvas.style.height = '300px';
     }
+}
+
+function init() {
+    const storage = localStorage.getItem('state');
+    if(storage) {
+        let localState = JSON.parse(storage);
+        state.gameSize = localState.gameSize;
+        state.results = localState.results;
+        state.tileSound = localState.tileSound;
+    }
+    getElemetnsTop();
+    getElemtnsBottom();
+    setCanvasWidth();
     tileSize = canvas.width / state.gameSize;
     field = getField(state.gameSize);
 
