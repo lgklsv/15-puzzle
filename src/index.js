@@ -300,7 +300,7 @@ function getElemetnsTop() {
                 <button class="text-reg" id="shuffle">Shuffle and start</button>
             </div>
             <div class="btn-primary stop">
-                <button class="text-reg" id="stop">Stop</button>
+                <button class="text-reg" id="stop">Pause</button>
             </div>
             <div class="btn-primary results">
                 <button class="text-reg" id="results">Results</button>
@@ -645,7 +645,6 @@ function swipeDetect(el) {
   // TOUCH SUPPORT
   surface.addEventListener('touchstart', function (e) {
     let touchObj = e.changedTouches[0];
-    console.log(touchObj);
     const rect = canvas.getBoundingClientRect();
     const x = touchObj.clientX - rect.left;
     const y = touchObj.clientY - rect.top;

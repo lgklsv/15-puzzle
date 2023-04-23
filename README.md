@@ -1,8 +1,6 @@
 # 15-puzzle (game of fifteen)
 
-#### Video Demo: <URL HERE>
-
-#### Description: [15-puzzle](https://gem-puzzle-lgklsv.netlify.app/) is a famous puzzle game where you should put all the tiles in the right order
+[15-puzzle](https://gem-puzzle-lgklsv.netlify.app/) is an old and quite famous puzzle game where you should put all the tiles in the right order from 1 up to 15.
 
 ## Key features
 
@@ -19,7 +17,9 @@
 ## Tech stack
 
 - javascript
-- scss)
+- scss
+- html
+- webpack
 
 ## How run locally
 
