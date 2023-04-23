@@ -2,6 +2,7 @@ const path = require('path');
 const HTMLWebpackplugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const faviconPath = path.join(__dirname, 'src', 'assets', 'favicon.png');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -32,6 +33,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackplugin({
       template: './template.html',
+      favicon: faviconPath,
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
